@@ -29,6 +29,13 @@ public class AccessTokenService {
     @Autowired
     JwtUtils jwtUtils;
 
+    /**
+     * <p>This method can create new token by username.
+     * </p>
+     * @param user parameter
+     * @return access token
+     * @since 1.0
+     */
     public AccessToken createAccessToken(User user) {
         String jwt = jwtUtils.generateTokenFromUsername(user.getUserName());
 

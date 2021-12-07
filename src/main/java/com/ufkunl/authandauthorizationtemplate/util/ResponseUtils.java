@@ -18,6 +18,13 @@ public class ResponseUtils {
     @Autowired
     private MessageSource messageSource;
 
+    /**
+     * <p>This method set message by language from properties
+     * </p>
+     * @param object,code parameter
+     * @return RestResponse
+     * @since 1.0
+     */
     public RestResponse createResponse(Object object,RestResponseCode code){
         RestResponse response = new RestResponse(code,object);
         String message = messageSource.getMessage(response.getResultMessage(),null, LocaleContextHolder.getLocale());

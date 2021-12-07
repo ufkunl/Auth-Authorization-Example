@@ -35,6 +35,14 @@ public class RefreshTokenService {
         return refreshTokenRepository.findByTokenAndRevoked(token,revoked);
     }
 
+    /**
+     * <p>This method control that there is user in db.
+     * throw exception if user not found. it is return refresh token.
+     * </p>
+     * @param userId parameter
+     * @return refresh token
+     * @since 1.0
+     */
     public RefreshToken createRefreshToken(String userId) {
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()){
@@ -49,13 +57,21 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
-    public RefreshToken verifyExpiration(RefreshToken token) {
-        if (token.getExpiryDate().compareTo(LocalDateTime.now()) < 0) {
-            token.setRevoked(true);
-            refreshTokenRepository.save(token);
+    /**
+     * <p>This method control that refresh token's expire date.
+     * it is revoke and throw exception if refresh token expire. it is return refresh token.
+     * </p>
+     * @param refreshToken parameter
+     * @return refresh token
+     * @since 1.0
+     */
+    public RefreshToken verifyExpiration(RefreshToken refreshToken) {
+        if (refreshToken.getExpiryDate().compareTo(LocalDateTime.now()) < 0) {
+            refreshToken.setRevoked(true);
+            refreshTokenRepository.save(refreshToken);
             throw new GeneralAppException(RestResponseCode.REFRESH_NOT_FOUND);
         }
-        return token;
+        return refreshToken;
     }
 
 }
