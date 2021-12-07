@@ -8,6 +8,10 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @Component
 public class ResponseUtils {
 

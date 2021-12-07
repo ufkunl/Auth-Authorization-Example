@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @Configuration
 public class MessageSourceConfiguration implements WebMvcConfigurer {
     @Bean

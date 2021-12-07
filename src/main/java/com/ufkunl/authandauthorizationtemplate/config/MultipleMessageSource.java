@@ -7,6 +7,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 public class MultipleMessageSource extends ReloadableResourceBundleMessageSource {
 
     private static final String PROPERTIES_SUFFIX = ".properties";

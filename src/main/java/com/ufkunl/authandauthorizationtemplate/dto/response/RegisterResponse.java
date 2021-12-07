@@ -5,9 +5,13 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SignupResponse extends BaseResponse{
+public class RegisterResponse extends BaseResponse{
     private String token;
     private String type = "Bearer";
     private String refreshToken;
@@ -16,7 +20,7 @@ public class SignupResponse extends BaseResponse{
     private String email;
     private List<String> roles;
 
-    public SignupResponse(String accessToken, String refreshToken, String id, String username, String email, List<String> roles) {
+    public RegisterResponse(String accessToken, String refreshToken, String id, String username, String email, List<String> roles) {
         this.token = accessToken;
         this.refreshToken = refreshToken;
         this.id = id;

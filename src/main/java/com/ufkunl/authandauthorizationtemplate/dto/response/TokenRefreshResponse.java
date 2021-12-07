@@ -3,6 +3,10 @@ package com.ufkunl.authandauthorizationtemplate.dto.response;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class TokenRefreshResponse extends BaseResponse{

@@ -10,6 +10,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 public class UserDetailsImpl implements UserDetails {
 
     private static final long serialVersionUID = 1L;

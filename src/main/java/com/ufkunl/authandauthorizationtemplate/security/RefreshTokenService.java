@@ -7,7 +7,6 @@ import com.ufkunl.authandauthorizationtemplate.enums.RestResponseCode;
 import com.ufkunl.authandauthorizationtemplate.exception.GeneralAppException;
 import com.ufkunl.authandauthorizationtemplate.repository.RefreshTokenRepository;
 import com.ufkunl.authandauthorizationtemplate.repository.UserRepository;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,10 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @Service
 public class RefreshTokenService {
 
@@ -32,7 +35,7 @@ public class RefreshTokenService {
         return refreshTokenRepository.findByTokenAndRevoked(token,revoked);
     }
 
-    public RefreshToken createRefreshToken(String userId) throws NotFoundException {
+    public RefreshToken createRefreshToken(String userId) {
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()){
             throw new GeneralAppException(RestResponseCode.USERNAME_OR_PASSWORD_NOT_FOUND);

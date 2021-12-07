@@ -6,6 +6,10 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @Data
 @Entity
 @Table(name = "ROLE")

@@ -17,6 +17,10 @@ import java.io.IOException;
 
 import static com.ufkunl.authandauthorizationtemplate.enums.RestResponseCode.USERNAME_OR_PASSWORD_NOT_FOUND;
 
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @Component
 public class AuthenticationEntryPointJwt implements AuthenticationEntryPoint {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationEntryPointJwt.class);

@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, String> {
 

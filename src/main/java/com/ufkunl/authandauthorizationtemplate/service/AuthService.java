@@ -3,7 +3,7 @@ package com.ufkunl.authandauthorizationtemplate.service;
 import com.ufkunl.authandauthorizationtemplate.dto.RestResponse;
 import com.ufkunl.authandauthorizationtemplate.dto.request.LoginRequest;
 import com.ufkunl.authandauthorizationtemplate.dto.request.RefreshTokenRequest;
-import com.ufkunl.authandauthorizationtemplate.dto.request.SignupRequest;
+import com.ufkunl.authandauthorizationtemplate.dto.request.RegisterRequest;
 import com.ufkunl.authandauthorizationtemplate.dto.response.LoginResponse;
 import com.ufkunl.authandauthorizationtemplate.dto.response.TokenRefreshResponse;
 import com.ufkunl.authandauthorizationtemplate.entity.AccessToken;
@@ -30,6 +30,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @Service
 public class AuthService{
 
@@ -54,7 +59,16 @@ public class AuthService{
     @Autowired
     ResponseUtils responseUtils;
 
-    public ResponseEntity<RestResponse> authenticate(LoginRequest loginRequest) throws NotFoundException {
+
+    /**
+     * <p>This method can return token, refresh token, roles
+     * it can create Access token and refresh token log. it can control that there is user in db
+     * </p>
+     * @param loginRequest parameter that have username and password
+     * @return generic class that have token, refresh token, roles
+     * @since 1.0
+     */
+    public ResponseEntity<RestResponse> authenticate(LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -62,9 +76,10 @@ public class AuthService{
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        User user = userRepository.findById(userDetails.getId()).orElseThrow(()-> new GeneralAppException(RestResponseCode.USERNAME_OR_PASSWORD_NOT_FOUND));
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-        AccessToken accessToken = accessTokenService.createAccessToken(userDetails);
+        AccessToken accessToken = accessTokenService.createAccessToken(user);
 
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setEmail(userDetails.getEmail());
@@ -77,28 +92,45 @@ public class AuthService{
         return ResponseEntity.ok(responseUtils.createResponse(loginResponse, RestResponseCode.SUCCESS));
     }
 
-    public ResponseEntity<RestResponse> refreshToken(RefreshTokenRequest request) throws NotFoundException {
 
-        RefreshToken refreshToken = refreshTokenService.findByTokenAndRevoked(request.getRefreshToken(), false)
+    /**
+     * <p>This method can return token, refresh token, roles by refresh token
+     * it can control that there is refresh token in db. it can create Access token and refresh token log.
+     * </p>
+     * @param refreshTokenRequest parameter that have refresh token
+     * @return generic class that have token, refresh token, roles
+     * @since 1.0
+     */
+    public ResponseEntity<RestResponse> refreshToken(RefreshTokenRequest refreshTokenRequest){
+
+        RefreshToken refreshToken = refreshTokenService.findByTokenAndRevoked(refreshTokenRequest.getRefreshToken(), false)
                 .orElseThrow(() -> new GeneralAppException(RestResponseCode.REFRESH_NOT_FOUND));
         refreshToken = refreshTokenService.verifyExpiration(refreshToken);
         User user = refreshToken.getUser();
-        AccessToken accessToken = accessTokenService.createAccessTokenFromRefreshToken(user);
+        AccessToken accessToken = accessTokenService.createAccessToken(user);
         refreshToken = refreshTokenService.createRefreshToken(user.getUserId());
         TokenRefreshResponse tokenRefreshResponse = new TokenRefreshResponse(accessToken.getToken(), refreshToken.getToken());
 
         return ResponseEntity.ok(responseUtils.createResponse(tokenRefreshResponse,RestResponseCode.SUCCESS));
     }
 
-    public ResponseEntity<RestResponse> registerUser(SignupRequest signUpRequest){
-        boolean userExist = userRepository.existsByUserNameOrEmail(signUpRequest.getUsername(),signUpRequest.getEmail());
+    /**
+     * <p>This method can return created user
+     * it can control that there is same user in db. it can encode user password.
+     * </p>
+     * @param registerRequest parameter that have user info
+     * @return created user
+     * @since 1.0
+     */
+    public ResponseEntity<RestResponse> registerUser(RegisterRequest registerRequest){
+        boolean userExist = userRepository.existsByUserNameOrEmail(registerRequest.getUsername(),registerRequest.getEmail());
         if (userExist) {
             throw new GeneralAppException(RestResponseCode.USERNAME_OR_EMAIL_EXIST);
         }
         User user = new User();
-        user.setUserName(signUpRequest.getUsername());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(encoder.encode(signUpRequest.getPassword()));
+        user.setUserName(registerRequest.getUsername());
+        user.setEmail(registerRequest.getEmail());
+        user.setPassword(encoder.encode(registerRequest.getPassword()));
         user = userRepository.save(user);
 
         return ResponseEntity.ok(responseUtils.createResponse(user,RestResponseCode.SUCCESS));

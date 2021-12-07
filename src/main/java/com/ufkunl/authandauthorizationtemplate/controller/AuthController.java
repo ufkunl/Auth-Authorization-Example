@@ -3,7 +3,7 @@ package com.ufkunl.authandauthorizationtemplate.controller;
 import com.ufkunl.authandauthorizationtemplate.dto.RestResponse;
 import com.ufkunl.authandauthorizationtemplate.dto.request.LoginRequest;
 import com.ufkunl.authandauthorizationtemplate.dto.request.RefreshTokenRequest;
-import com.ufkunl.authandauthorizationtemplate.dto.request.SignupRequest;
+import com.ufkunl.authandauthorizationtemplate.dto.request.RegisterRequest;
 import com.ufkunl.authandauthorizationtemplate.service.AuthService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -28,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RestResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<RestResponse> registerUser(@Valid @RequestBody RegisterRequest signUpRequest) {
        return authService.registerUser(signUpRequest);
     }
 

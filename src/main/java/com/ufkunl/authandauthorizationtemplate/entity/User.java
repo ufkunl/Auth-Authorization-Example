@@ -9,6 +9,11 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
+
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
 @Data
 @Entity
 @Table(	name = "USER",
