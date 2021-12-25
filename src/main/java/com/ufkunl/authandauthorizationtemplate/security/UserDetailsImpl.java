@@ -1,15 +1,18 @@
 package com.ufkunl.authandauthorizationtemplate.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ufkunl.authandauthorizationtemplate.entity.Role;
 import com.ufkunl.authandauthorizationtemplate.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -40,9 +43,10 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
-        List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleName())).toList();
 
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+                .collect(Collectors.toList());
 
         return new UserDetailsImpl(
                 user.getUserId(),

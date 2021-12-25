@@ -16,37 +16,46 @@ import java.util.Set;
  */
 @Data
 @Entity
-@Table(	name = "USER",
+@Table(	name = "user",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "USER_NAME"),
-                @UniqueConstraint(columnNames = "EMAIL")
+                @UniqueConstraint(columnNames = "user_name"),
+                @UniqueConstraint(columnNames = "email")
         })
 @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 public class User {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @Column(name = "USER_ID", nullable=false)
+    @Column(name = "user_id", nullable=false, unique = true)
     private String userId;
 
     @NotBlank
-    @Column(name = "USER_NAME")
+    @Column(name = "user_name")
     private String userName;
 
     @NotBlank
     @Email
-    @Column(name = "EMAIL")
+    @Column(name = "email")
     private String email;
 
     @NotBlank
     @Size(max = 120)
-    @Column(name = "PASSWORD")
+    @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(	name = "USER_ROLE",
-            joinColumns = @JoinColumn(name = "USER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(	name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    public User(String username, String email, String password) {
+        this.userName = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User() {
+
+    }
 }

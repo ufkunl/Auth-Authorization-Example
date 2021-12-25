@@ -12,17 +12,17 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 @Entity
-@Table(name = "ROLE")
+@Table(name = "role")
 @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 public class Role {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @Column(name = "ROLE_ID", nullable=false)
+    @Column(name = "role_id", nullable=false)
     private String roleId;
 
     @NotBlank
-    @Column(name = "ROLE_NAME")
+    @Column(name = "role_name")
     private String roleName;
 
 }

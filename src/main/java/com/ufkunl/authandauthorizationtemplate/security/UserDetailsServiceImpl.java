@@ -1,6 +1,8 @@
 package com.ufkunl.authandauthorizationtemplate.security;
 
 import com.ufkunl.authandauthorizationtemplate.entity.User;
+import com.ufkunl.authandauthorizationtemplate.enums.RestResponseCode;
+import com.ufkunl.authandauthorizationtemplate.exception.GeneralAppException;
 import com.ufkunl.authandauthorizationtemplate.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUserName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+                .orElseThrow(() -> new GeneralAppException(RestResponseCode.USERNAME_OR_PASSWORD_NOT_FOUND));
 
         return UserDetailsImpl.build(user);
     }

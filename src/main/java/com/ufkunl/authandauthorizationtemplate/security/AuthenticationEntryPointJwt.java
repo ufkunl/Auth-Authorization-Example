@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.ufkunl.authandauthorizationtemplate.enums.RestResponseCode.ACCESS_TOKEN_INVALID;
 import static com.ufkunl.authandauthorizationtemplate.enums.RestResponseCode.USERNAME_OR_PASSWORD_NOT_FOUND;
 
 
@@ -35,9 +36,11 @@ public class AuthenticationEntryPointJwt implements AuthenticationEntryPoint {
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
         final ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(), responseUtils.createResponse(null, USERNAME_OR_PASSWORD_NOT_FOUND));
-
+        if(authException.getMessage().equals("Bad credentials")){
+            mapper.writeValue(response.getOutputStream(), responseUtils.createResponse(null, USERNAME_OR_PASSWORD_NOT_FOUND));
+        }else{
+            mapper.writeValue(response.getOutputStream(), responseUtils.createResponse(null, ACCESS_TOKEN_INVALID));
+        }
     }
 }
