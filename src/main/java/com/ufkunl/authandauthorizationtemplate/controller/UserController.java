@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class  UserController {
 
     @Autowired
     private UserService userService;
@@ -33,17 +33,15 @@ public class UserController {
     @Autowired
     private UserUtils userUtils;
 
-    @PostMapping()
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RestResponse> createUser(@Valid @RequestBody UserRequest userRequest) {
         return ResponseEntity.ok(responseUtils.createResponse(userService.createUser(userRequest), RestResponseCode.SUCCESS));
     }
 
-    @GetMapping()
-    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RestResponse> getAllUser() {
-
-        User user = userUtils.getAuthenticatedUser();
-
         return ResponseEntity.ok(responseUtils.createResponse(userService.getAllUser(), RestResponseCode.SUCCESS));
     }
 

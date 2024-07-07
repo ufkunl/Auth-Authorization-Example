@@ -1,5 +1,7 @@
 package com.ufkunl.authandauthorizationtemplate.security;
 
+import com.ufkunl.authandauthorizationtemplate.enums.RestResponseCode;
+import com.ufkunl.authandauthorizationtemplate.exception.GeneralAppException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +58,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
     String headerAuth = request.getHeader("Authorization");
 
     if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-      return headerAuth.substring(7, headerAuth.length());
+      return headerAuth.substring(7);
     }
     return null;
   }

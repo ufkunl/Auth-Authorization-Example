@@ -1,5 +1,6 @@
 package com.ufkunl.authandauthorizationtemplate.dto.request;
 
+import com.ufkunl.authandauthorizationtemplate.entity.Role;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +18,7 @@ public class UserRequest extends BaseRequest{
 
     private String email;
 
-    private Set<String> role;
+    private Set<Role> role;
 
     private String password;
 
