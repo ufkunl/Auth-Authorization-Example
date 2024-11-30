@@ -1,17 +1,16 @@
 package com.ufkunl.authandauthorizationtemplate.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ufkunl.authandauthorizationtemplate.entity.Role;
 import com.ufkunl.authandauthorizationtemplate.entity.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -20,18 +19,21 @@ import java.util.stream.Collectors;
  */
 public class UserDetailsImpl implements UserDetails {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
+    @Getter
     private final String id;
 
     private final String userName;
 
+    @Getter
     private final String email;
 
     @JsonIgnore
     private final String password;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(String id, String userName, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
@@ -61,10 +63,6 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    public String getId() {
-        return id;
-    }
-
     @Override
     public String getPassword() {
         return password;
@@ -73,10 +71,6 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return userName;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @Override

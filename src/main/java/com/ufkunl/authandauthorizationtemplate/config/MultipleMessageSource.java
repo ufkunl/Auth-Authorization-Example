@@ -14,7 +14,7 @@ public class MultipleMessageSource extends ReloadableResourceBundleMessageSource
 
     private static final String PROPERTIES_SUFFIX = ".properties";
 
-    private PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    private final PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
     @Override
     protected PropertiesHolder refreshProperties(String filename, PropertiesHolder propHolder) {

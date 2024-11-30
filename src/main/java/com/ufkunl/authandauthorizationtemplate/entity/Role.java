@@ -1,6 +1,5 @@
 package com.ufkunl.authandauthorizationtemplate.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,7 +13,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Entity
 @Table(name = "role")
-@AllArgsConstructor
 @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 public class Role {
 

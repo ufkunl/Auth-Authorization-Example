@@ -66,7 +66,7 @@ public class RefreshTokenService {
      * @since 1.0
      */
     public RefreshToken verifyExpiration(RefreshToken refreshToken) {
-        if (refreshToken.getExpiryDate().compareTo(LocalDateTime.now()) < 0) {
+        if (refreshToken.getExpiryDate().isBefore(LocalDateTime.now())) {
             refreshToken.setRevoked(true);
             refreshTokenRepository.save(refreshToken);
             throw new GeneralAppException(RestResponseCode.REFRESH_NOT_FOUND);

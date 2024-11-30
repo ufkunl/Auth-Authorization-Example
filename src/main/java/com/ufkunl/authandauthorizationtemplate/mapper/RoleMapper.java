@@ -18,6 +18,7 @@ public class RoleMapper implements BaseMapper<Role, RoleResponse>{
     @Override
     public RoleResponse entityToDto(Role entity) {
         RoleResponse roleResponse = new RoleResponse();
+        roleResponse.setRoleId(entity.getRoleId());
         roleResponse.setRoleName(entity.getRoleName());
         return roleResponse;
     }

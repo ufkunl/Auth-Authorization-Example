@@ -12,7 +12,7 @@ import java.util.Set;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class UserRequest extends BaseRequest{
+public class UserRequest extends BaseRequest {
 
     private String username;
 

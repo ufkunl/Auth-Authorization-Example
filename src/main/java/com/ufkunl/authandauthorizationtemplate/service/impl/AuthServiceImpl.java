@@ -11,12 +11,9 @@ import com.ufkunl.authandauthorizationtemplate.enums.RestResponseCode;
 import com.ufkunl.authandauthorizationtemplate.exception.GeneralAppException;
 import com.ufkunl.authandauthorizationtemplate.repository.UserRepository;
 import com.ufkunl.authandauthorizationtemplate.security.AccessTokenService;
-import com.ufkunl.authandauthorizationtemplate.security.JwtUtils;
 import com.ufkunl.authandauthorizationtemplate.security.RefreshTokenService;
 import com.ufkunl.authandauthorizationtemplate.security.UserDetailsImpl;
 import com.ufkunl.authandauthorizationtemplate.service.AuthService;
-import com.ufkunl.authandauthorizationtemplate.util.ResponseUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,23 +29,17 @@ import java.util.List;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final RefreshTokenService refreshTokenService;
+    private final AccessTokenService accessTokenService;
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RefreshTokenService refreshTokenService;
-
-    @Autowired
-    AccessTokenService accessTokenService;
-
-    @Autowired
-    ResponseUtils responseUtils;
-
-    @Autowired
-    JwtUtils jwtUtils;
+    public AuthServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, RefreshTokenService refreshTokenService, AccessTokenService accessTokenService) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.refreshTokenService = refreshTokenService;
+        this.accessTokenService = accessTokenService;
+    }
 
     /**
      * <p>This method can return token, refresh token, roles
@@ -93,7 +84,6 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public TokenRefreshResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
-
         RefreshToken refreshToken = refreshTokenService.findByTokenAndRevoked(refreshTokenRequest.getRefreshToken(), false)
                 .orElseThrow(() -> new GeneralAppException(RestResponseCode.REFRESH_NOT_FOUND));
         refreshToken = refreshTokenService.verifyExpiration(refreshToken);
@@ -102,5 +92,4 @@ public class AuthServiceImpl implements AuthService {
         refreshToken = refreshTokenService.createRefreshToken(user.getUserId());
         return new TokenRefreshResponse(accessToken.getToken(), refreshToken.getToken());
     }
-
 }

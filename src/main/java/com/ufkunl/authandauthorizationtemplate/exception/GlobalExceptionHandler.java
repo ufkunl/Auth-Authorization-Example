@@ -1,32 +1,45 @@
 package com.ufkunl.authandauthorizationtemplate.exception;
 
-import com.ufkunl.authandauthorizationtemplate.util.ResponseUtils;
+import com.ufkunl.authandauthorizationtemplate.dto.RestResponse;
+import com.ufkunl.authandauthorizationtemplate.enums.RestResponseCode;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Locale;
 
+import static com.ufkunl.authandauthorizationtemplate.enums.RestResponseCode.ERROR;
 
 /**
  * Created by Ufuk UNAL on 07.12.2021
  */
 @Slf4j
-@ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+@RestControllerAdvice
+public class GlobalExceptionHandler {
 
-    @Autowired
-    ResponseUtils responseUtils;
+    private final MessageSource messageSource;
 
-    @ExceptionHandler(value = {GeneralAppException.class})
-    protected ResponseEntity<Object> handleRuntimeProductException(GeneralAppException ex, WebRequest request) {
-        Object response = responseUtils.createResponse(null, ex.getRestResponseCode());
-        return handleExceptionInternal(ex,response, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    public GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<RestResponse<RestResponseCode>> handleException(Exception ex, Locale locale) {
+        if (ex instanceof AccessDeniedException || ex instanceof AuthenticationException) {
+            throw (RuntimeException) ex;
+        }
+        log.error("Unexpected Error : {}", ex.getMessage());
+        String message = messageSource.getMessage(ERROR.getMessage(), null, locale);
+        return ResponseEntity.ok().body(new RestResponse<>(ERROR.code(), message, null));
+    }
+
+    @ExceptionHandler(GeneralAppException.class)
+    public ResponseEntity<RestResponse<RestResponseCode>> handleGeneralAppException(GeneralAppException ex, Locale locale) {
+        String message = messageSource.getMessage(ex.getRestResponseCode().getMessage(), null, locale);
+        return ResponseEntity.ok().body(new RestResponse<>(ex.getRestResponseCode().code(), message, null));
+    }
 }

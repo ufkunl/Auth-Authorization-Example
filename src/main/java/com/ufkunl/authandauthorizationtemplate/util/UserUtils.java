@@ -2,7 +2,6 @@ package com.ufkunl.authandauthorizationtemplate.util;
 
 import com.ufkunl.authandauthorizationtemplate.entity.User;
 import com.ufkunl.authandauthorizationtemplate.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +10,11 @@ import javax.persistence.EntityNotFoundException;
 @Component
 public class UserUtils {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserUtils(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User getAuthenticatedUser(){
         return userRepository.findByUserName(SecurityContextHolder.getContext().getAuthentication().getName())
@@ -22,9 +24,4 @@ public class UserUtils {
     public String getAuthenticatedPersonalId() throws EntityNotFoundException {
         return getAuthenticatedUser().getUserId();
     }
-
-//    public PersonalDTO getAuthenticatedPersonalDTO() throws EntityNotFoundException {
-//        return personalMapper.toDTO(getAuthenticatedPersonal());
-//    }
-
 }

@@ -10,7 +10,6 @@ import com.ufkunl.authandauthorizationtemplate.repository.RoleRepository;
 import com.ufkunl.authandauthorizationtemplate.repository.UserRepository;
 import com.ufkunl.authandauthorizationtemplate.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +19,15 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
+    private final UserResponseMapper userResponseMapper;
 
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    UserResponseMapper userResponseMapper;
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, UserResponseMapper userResponseMapper) {
+        this.userRepository = userRepository;
+        this.encoder = encoder;
+        this.userResponseMapper = userResponseMapper;
+    }
 
     /**
      * <p>This method can return created user
@@ -60,5 +57,4 @@ public class UserServiceImpl implements UserService {
         List<User> users = (List<User>) userRepository.findAll();
         return userResponseMapper.entityListToDtoList(users);
     }
-
 }

@@ -9,16 +9,21 @@ import lombok.EqualsAndHashCode;
 /**
  * Created by Ufuk UNAL on 07.12.2021
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class RestResponse extends BaseResponse {
-    private RestResponseCode resultCode;
-    private String resultMessage;
-    private transient Object data;
+public class RestResponse<T> {
+    private String code;
+    private String message;
+    private transient T data;
 
-    public RestResponse(RestResponseCode resultCode, Object data) {
-        this.resultCode = resultCode;
-        this.resultMessage = resultCode.getMessage();
+    public RestResponse(RestResponseCode restResponseCode, T data) {
+        this.code = restResponseCode.getCode();
+        this.message = restResponseCode.getMessage();
+        this.data = data;
+    }
+
+    public RestResponse(String code, String message, T data) {
+        this.code = code;
+        this.message = message;
         this.data = data;
     }
 }

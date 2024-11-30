@@ -1,0 +1,16 @@
+package com.ufkunl.authandauthorizationtemplate.dto.request;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+
+/**
+ * Created by Ufuk UNAL on 07.12.2021
+ */
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class RoleRequest extends BaseRequest{
+
+    private String roleName;
+
+}
